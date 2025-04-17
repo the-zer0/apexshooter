@@ -7,7 +7,7 @@ let bullets = [];
 let enemies = [];
 let score = 0;
 
-// Resize canvas to match visible size
+// Setup canvas
 function resizeCanvas() {
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
@@ -15,27 +15,22 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Mouse support
-canvas.addEventListener('mousemove', e => {
+// Mouse
+canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
   mouse.x = (e.clientX - rect.left) * (canvas.width / rect.width);
   mouse.y = (e.clientY - rect.top) * (canvas.height / rect.height);
 });
+canvas.addEventListener('mousedown', () => shootBullet());
 
-canvas.addEventListener('mousedown', e => {
-  if (e.button === 0) shootBullet();
-});
-
-// Touch support
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
+// Touch
+canvas.addEventListener('touchmove', (e) => {
   const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
   mouse.x = (touch.clientX - rect.left) * (canvas.width / rect.width);
   mouse.y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-}, { passive: false });
-
-canvas.addEventListener('touchstart', e => {
+});
+canvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
   shootBullet();
 }, { passive: false });
@@ -56,15 +51,14 @@ function shootBullet() {
 function drawCannon() {
   const centerX = canvas.width / 2;
   const cannonY = canvas.height - 30;
+  const angle = Math.atan2(mouse.y - cannonY, mouse.x - centerX);
 
   // Base
   ctx.fillStyle = 'gray';
   ctx.fillRect(centerX - 25, cannonY, 50, 20);
 
   // Barrel
-  const angle = Math.atan2(mouse.y - cannonY, mouse.x - centerX);
   const barrelLength = 40;
-
   ctx.save();
   ctx.translate(centerX, cannonY);
   ctx.rotate(angle);
@@ -90,8 +84,12 @@ function drawBullets() {
 
 function spawnEnemies() {
   if (Math.random() < 0.02) {
-    let x = Math.random() * (canvas.width - 40);
-    enemies.push({ x: x, y: 0, width: 40, height: 20 });
+    enemies.push({
+      x: Math.random() * (canvas.width - 40),
+      y: 0,
+      width: 40,
+      height: 20
+    });
   }
 }
 
