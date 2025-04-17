@@ -2,12 +2,20 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
 
-let mouse = { x: canvas.width / 2, y: canvas.height - 30 };
+let mouse = { x: 0, y: 0 };
 let bullets = [];
 let enemies = [];
 let score = 0;
 
-// Mouse movement
+// Resize canvas to match visible size
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Mouse support
 canvas.addEventListener('mousemove', e => {
   const rect = canvas.getBoundingClientRect();
   mouse.x = (e.clientX - rect.left) * (canvas.width / rect.width);
@@ -33,6 +41,8 @@ canvas.addEventListener('touchstart', e => {
 }, { passive: false });
 
 function shootBullet() {
+  const centerX = canvas.width / 2;
+  const cannonY = canvas.height - 30;
   const angle = Math.atan2(mouse.y - cannonY, mouse.x - centerX);
   const speed = 6;
   bullets.push({
@@ -43,10 +53,10 @@ function shootBullet() {
   });
 }
 
-const centerX = canvas.width / 2;
-const cannonY = canvas.height - 30;
-
 function drawCannon() {
+  const centerX = canvas.width / 2;
+  const cannonY = canvas.height - 30;
+
   // Base
   ctx.fillStyle = 'gray';
   ctx.fillRect(centerX - 25, cannonY, 50, 20);
@@ -72,7 +82,6 @@ function drawBullets() {
     ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    // Remove if off screen
     if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
       bullets.splice(i, 1);
     }
