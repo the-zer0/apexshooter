@@ -15,25 +15,22 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Mouse
-canvas.addEventListener('mousemove', (e) => {
+// Mouse input
+canvas.addEventListener('mousedown', (e) => {
   const rect = canvas.getBoundingClientRect();
   mouse.x = (e.clientX - rect.left) * (canvas.width / rect.width);
   mouse.y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  shootBullet();
 });
-canvas.addEventListener('mousedown', () => shootBullet());
 
-// Touch
-canvas.addEventListener('touchmove', (e) => {
+// Touch input (Tap to shoot and aim)
+canvas.addEventListener('touchstart', (e) => {
   const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
   mouse.x = (touch.clientX - rect.left) * (canvas.width / rect.width);
   mouse.y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-});
-canvas.addEventListener('touchstart', (e) => {
-  e.preventDefault();
   shootBullet();
-}, { passive: false });
+}, { passive: true });
 
 function shootBullet() {
   const centerX = canvas.width / 2;
@@ -53,11 +50,9 @@ function drawCannon() {
   const cannonY = canvas.height - 30;
   const angle = Math.atan2(mouse.y - cannonY, mouse.x - centerX);
 
-  // Base
   ctx.fillStyle = 'gray';
   ctx.fillRect(centerX - 25, cannonY, 50, 20);
 
-  // Barrel
   const barrelLength = 40;
   ctx.save();
   ctx.translate(centerX, cannonY);
