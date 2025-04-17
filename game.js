@@ -2,24 +2,35 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
 
-const centerX = canvas.width / 2;
-const cannonY = canvas.height - 30;
-let mouse = { x: centerX, y: cannonY };
+let mouse = { x: canvas.width / 2, y: canvas.height - 30 };
 let bullets = [];
 let enemies = [];
 let score = 0;
 
+// Mouse movement
 canvas.addEventListener('mousemove', e => {
   const rect = canvas.getBoundingClientRect();
-  mouse.x = e.clientX - rect.left;
-  mouse.y = e.clientY - rect.top;
+  mouse.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+  mouse.y = (e.clientY - rect.top) * (canvas.height / rect.height);
 });
 
 canvas.addEventListener('mousedown', e => {
-  if (e.button === 0) {
-    shootBullet();
-  }
+  if (e.button === 0) shootBullet();
 });
+
+// Touch support
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+  mouse.y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+}, { passive: false });
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  shootBullet();
+}, { passive: false });
 
 function shootBullet() {
   const angle = Math.atan2(mouse.y - cannonY, mouse.x - centerX);
@@ -31,6 +42,9 @@ function shootBullet() {
     dy: Math.sin(angle) * speed
   });
 }
+
+const centerX = canvas.width / 2;
+const cannonY = canvas.height - 30;
 
 function drawCannon() {
   // Base
@@ -58,7 +72,7 @@ function drawBullets() {
     ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    // Remove bullets outside screen
+    // Remove if off screen
     if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
       bullets.splice(i, 1);
     }
