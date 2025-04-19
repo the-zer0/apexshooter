@@ -1,0 +1,50 @@
+@font-face {
+  font-family: 'VeniteAdoremus';
+  src: url('../fonts/VeniteAdoremus.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+#game-canvas {
+  background-color: black;
+  display: block;
+  margin: 0 auto;
+  border: 3px solid red;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgb(124, 4, 4);
+  max-width: 100%;
+}
+
+#score-board {
+  color: red;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'VeniteAdoremus', sans-serif;
+  text-shadow: 0 0 8px red;
+}
+
+.game-button {
+  background-color: #300000;
+  color: #ff0000;
+  border: 2px solid #ff0000;
+  padding: 10px 30px;
+  font-size: 24px;
+  cursor: pointer;
+  font-family: 'VeniteAdoremus', sans-serif;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px #ff0000;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+.game-button:hover {
+  background-color: #ff0000;
+  color: #000000;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+}
